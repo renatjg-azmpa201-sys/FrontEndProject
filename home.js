@@ -12,7 +12,7 @@ function render(items) {
   list.innerHTML = items.map(show => `
     <div class="col-6 col-md-3">
       <div class="card h-100 bg-dark text-white">
-        <img src="${show.image?.medium || ''}" class="card-img-top">
+        <img src="${show.image?.medium || ''}" loading="lazy" class="card-img-top">
         <div class="card-body">
           <h5 class="card-title">${show.name}</h5>
           <p><i class="fa-solid fa-star"></i> ${show.rating.average || 'N/A'}</p>

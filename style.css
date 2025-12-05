@@ -2,6 +2,7 @@ body {
   background: #121212;
   color: #fff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  scroll-behavior: smooth;
 }
 
 h1, h2, h5 {
@@ -9,29 +10,34 @@ h1, h2, h5 {
 }
 
 .card {
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.3s, box-shadow 0.3s;
   border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.7);
 }
 
 .card img {
   object-fit: cover;
   height: 200px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  width: 100%;
 }
 
-.btn-light {
-  transition: background 0.2s, color 0.2s;
+.card-body {
+  padding: 1rem;
 }
 
-.btn-light:hover {
-  background: #ffc107;
-  color: #000;
+.btn-light, .btn-warning {
+  transition: all 0.2s;
+}
+
+.btn-light:hover, .btn-warning:hover {
+  background: #ffc107 !important;
+  color: #000 !important;
 }
 
 #search {
@@ -46,16 +52,31 @@ h1, h2, h5 {
   color: #aaa;
 }
 
-.card-body {
-  padding: 1rem;
-}
-
-.card .fa-star {
-  color: #ffc107;
-  margin-right: 5px;
-}
-
 #details img {
   border-radius: 10px;
   max-width: 100%;
+  display: block;
+  margin: 0 auto 20px;
+}
+
+/* Back to top button */
+#toTopBtn {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  display: none;
+  background: #ffc107;
+  color: #000;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s;
+}
+
+#toTopBtn:hover {
+  background: #ffb100;
 }
