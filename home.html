@@ -3,40 +3,66 @@
 <head>
   <meta charset="UTF-8" />
   <title>Home</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+    }
+
+    .sticky-search {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #000;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      transition: 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      border-color: #ff3333;
+    }
+
+    .card img {
+      height: 220px;
+      object-fit: cover;
+      border-bottom: 1px solid #333;
+    }
+
+    h1 {
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+  </style>
 </head>
 <body>
 
   <div class="container py-4">
-    <h1 class="mb-4 text-center text-warning"><i class="fa-solid fa-tv"></i> TV Shows</h1>
 
-    <input id="search" class="form-control mb-4" placeholder="Search shows...">
+    <h1 class="mb-4 text-center">TV Shows</h1>
+
+    <div class="sticky-search">
+      <input id="search" class="form-control mb-3" placeholder="Search...">
+    </div>
 
     <div id="list" class="row g-3"></div>
 
     <div class="text-center mt-4">
-      <button id="loadMore" class="btn btn-warning btn-lg"><i class="fa-solid fa-arrow-down"></i> Load More</button>
+      <button id="loadMore" class="btn btn-danger px-4">Load More</button>
     </div>
+
   </div>
 
-  <button id="toTopBtn" title="Go to top"><i class="fa-solid fa-arrow-up"></i></button>
-
   <script type="module" src="home.js"></script>
-  <script>
-    const toTopBtn = document.getElementById('toTopBtn');
-    window.onscroll = function() {
-      if(document.body.scrollTop > 300 || document.documentElement.scrollTop > 300){
-        toTopBtn.style.display = "block";
-      } else {
-        toTopBtn.style.display = "none";
-      }
-    };
 
-    toTopBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  </script>
 </body>
 </html>
