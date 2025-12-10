@@ -1,42 +1,38 @@
 import { getShowById } from './api.js';
 
-const wrapper = document.getElementById('details');
-const id = new URLSearchParams(location.search).get('id');
+const params = new URLSearchParams(location.search);
+const id = params.get('id');
+
+const detailImg = document.getElementById('detailImg');
+const dTitle = document.getElementById('dTitle');
+const dGenres = document.getElementById('dGenres');
+const dSummary = document.getElementById('dSummary');
+const dRating = document.getElementById('dRating');
+const dStatus = document.getElementById('dStatus');
+const dPremier = document.getElementById('dPremier');
+const dSite = document.getElementById('dSite');
+const backdrop = document.getElementById('backdrop');
 
 if (!id) {
-  wrapper.innerHTML = `<p class="text-danger">No ID provided!</p>`;
+  dTitle.textContent = 'No ID provided';
+} else {
+  getShowById(id).then(show => {
+    detailImg.src = show.image?.original || '';
+    dTitle.textContent = show.name || '';
+    dGenres.textContent = (show.genres || []).join(' • ');
+    dSummary.innerHTML = show.summary || '';
+    dRating.textContent = `Rating: ${show.rating.average || 'N/A'}`;
+    dStatus.textContent = `Status: ${show.status || '-'}`;
+    dPremier.textContent = `Premiered: ${show.premiered || '-'}`;
+    if (show.officialSite) {
+      dSite.href = show.officialSite;
+      dSite.style.display = 'inline-block';
+    } else {
+      dSite.style.display = 'none';
+    }
+    if (show.image?.original) {
+      backdrop.style.backgroundImage = `url(${show.image.original})`;
+      backdrop.classList.add('has-img');
+    }
+  });
 }
-
-getShowById(id).then(show => {
-  wrapper.style.backgroundImage = `url(${show.image?.original || ""})`;
-
-  wrapper.innerHTML = `
-    <div class="detail-card shadow-lg">
-
-      <div class="poster">
-        <img src="${show.image?.original || ''}" alt="${show.name}">
-      </div>
-
-      <div class="info">
-        <h1 class="title">${show.name}</h1>
-
-        <div class="tags mb-3">
-          ${show.genres.map(g => `<span class="badge bg-warning text-dark me-2">${g}</span>`).join('')}
-        </div>
-
-        <p class="summary">${show.summary || ''}</p>
-
-        <p><strong>Rating:</strong> ⭐ ${show.rating.average || 'N/A'}</p>
-        <p><strong>Status:</strong> ${show.status}</p>
-        <p><strong>Premiered:</strong> ${show.premiered}</p>
-
-        ${show.officialSite ? `
-          <a href="${show.officialSite}" target="_blank" class="btn btn-warning mt-3">
-            Visit Official Site
-          </a>
-        ` : ""}
-      </div>
-
-    </div>
-  `;
-});
