@@ -82,3 +82,73 @@ search.addEventListener('input', () => {
 randomBtn.addEventListener('click', pickRandom);
 loadMore.addEventListener('click', load);
 load();
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const track = document.querySelector(".carousel-track");
+
+  async function loadShows() {
+    try {
+      const res = await fetch("https://api.tvmaze.com/shows");
+      const data = await res.json();
+
+      const top10 = data
+        .filter(show => show.rating?.average) 
+        .sort((a, b) => b.rating.average - a.rating.average)
+        .slice(0, 10);
+
+      top10.forEach(show => {
+        const slide = document.createElement("div");
+        slide.classList.add("carousel-slide");
+
+        slide.innerHTML = `
+          <img src="${show.image?.original || show.image?.medium}" alt="${show.name}">
+          <div class="carousel-info">
+            <h3>${show.name}</h3>
+            <p>Rating: ${show.rating.average}</p>
+          </div>
+        `;
+
+        track.appendChild(slide);
+      });
+
+      startCarousel();
+    } catch (err) {
+      console.error("TVMaze error:", err);
+    }
+  }
+
+  loadShows();
+
+  function startCarousel() {
+    const slides = document.querySelectorAll(".carousel-slide");
+    const btnLeft = document.querySelector(".carousel-arrow.left");
+    const btnRight = document.querySelector(".carousel-arrow.right");
+
+    let currentIndex = 0;
+
+    function goToSlide(index) {
+      currentIndex = index;
+      track.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    if (btnRight) {
+      btnRight.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        goToSlide(currentIndex);
+      });
+    }
+
+    if (btnLeft) {
+      btnLeft.addEventListener("click", () => {
+        currentIndex = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
+        goToSlide(currentIndex);
+      });
+    }
+
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % slides.length;
+      goToSlide(currentIndex);
+    }, 4500);
+  }
+});
