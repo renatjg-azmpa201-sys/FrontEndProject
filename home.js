@@ -23,7 +23,7 @@ function cardHTML(show) {
         <div class="poster-overlay">
           <div class="meta">
             <strong>${show.name}</strong>
-            <span class="rating">⭐ ${show.rating.average || 'N/A'}</span>
+            <span class="rating">⭐ ${show.rating?.average || 'N/A'}</span>
           </div>
           <a class="glass-link" href="detail.html?id=${show.id}">More</a>
         </div>
@@ -32,7 +32,7 @@ function cardHTML(show) {
   `;
 }
 
-function render(items, reset=false) {
+function render(items, reset = false) {
   if (reset) list.innerHTML = '';
   list.insertAdjacentHTML('beforeend', items.map(cardHTML).join(''));
 }
@@ -42,12 +42,17 @@ async function load() {
     allData = await getShows(apiPage);
     apiPage++;
   }
+
   const start = page * 20;
   const chunk = allData.slice(start, start + 20);
+
   uiData = [...uiData, ...chunk];
   render(chunk);
+
   page++;
+
   if (page * 20 >= allData.length) page = 0;
+
   if (!heroImg.src && uiData.length) setHero(uiData[0]);
 }
 
@@ -61,28 +66,40 @@ function setHero(show) {
 
 function pickRandom() {
   if (!uiData.length) return;
+
   const idx = Math.floor(Math.random() * uiData.length);
   const show = uiData[idx];
+
   setHero(show);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-search.addEventListener('input', () => {
+search.addEventListener("input", async () => {
   const q = search.value.trim().toLowerCase();
+
   if (!q) {
-    list.innerHTML = '';
+    list.innerHTML = "";
     render(uiData, true);
     return;
   }
-  const filtered = uiData.filter(s => s.name.toLowerCase().includes(q));
-  list.innerHTML = '';
-  render(filtered, true);
+
+  try {
+    const res = await fetch(`https://api.tvmaze.com/search/shows?q=${q}`);
+    const data = await res.json();
+
+    const result = data.map(item => item.show);
+
+    list.innerHTML = "";
+    render(result, true);
+
+  } catch (err) {
+    console.error("Search error:", err);
+  }
 });
 
 randomBtn.addEventListener('click', pickRandom);
 loadMore.addEventListener('click', load);
 load();
-
 
 document.addEventListener("DOMContentLoaded", async () => {
   const track = document.querySelector(".carousel-track");
@@ -93,7 +110,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = await res.json();
 
       const top10 = data
-        .filter(show => show.rating?.average) 
+        .filter(show => show.rating?.average)
         .sort((a, b) => b.rating.average - a.rating.average)
         .slice(0, 10);
 
@@ -141,7 +158,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (btnLeft) {
       btnLeft.addEventListener("click", () => {
-        currentIndex = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
+        currentIndex =
+          currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
         goToSlide(currentIndex);
       });
     }
