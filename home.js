@@ -170,3 +170,87 @@ document.addEventListener("DOMContentLoaded", async () => {
     }, 4500);
   }
 });
+
+
+const popup = document.getElementById("popupCard");
+const popupClose = document.getElementById("popupClose");
+const popupTitle = document.getElementById("popupTitle");
+const popupText = document.getElementById("popupText");
+const popupIcon = document.getElementById("popupIcon");
+const popupBtn = document.getElementById("popupBtn");
+
+const data = {
+  home: {
+    title: "Home",
+    text: "Ana səhifəyə qayıt.",
+    icon: "🏠",
+    link: "index.html"
+  },
+  trending: {
+    title: "Trending",
+    text: "Bu həftənin ən populyar filmləri.",
+    icon: "🔥",
+    link: "https://www.imdb.com/search/title/?moviemeter=,10"
+  },
+  mylist: {
+    title: "My List",
+    text: "Saxladığın filmlər burada olacaq.",
+    icon: "⭐",
+    link: "#"
+  },
+  contact: {
+    title: "Contact",
+    text: "Bizimlə WhatsApp vasitəsilə əlaqə saxla.",
+    icon: "📞",
+    link: "https://api.whatsapp.com/send/?phone=%2B994555472649"
+  },
+  faq: {
+    title: "FAQ",
+    text: "Ən çox verilən suallar və cavablar.",
+    icon: "❓",
+    link: "https://en.wikipedia.org/wiki/FAQ"
+  },
+  terms: {
+    title: "Terms & Privacy",
+    text: "İstifadə qaydaları və məxfilik siyasəti.",
+    icon: "📜",
+    link: "https://www.termsfeed.com/blog/privacy-policies-vs-terms-conditions/"
+  },
+  instagram: {
+    title: "Instagram",
+    text: "Rəsmi Instagram səhifəmiz.",
+    icon: '<i class="fa-brands fa-instagram"></i>',
+    link: "https://www.instagram.com/parkcinema"
+  },
+  twitter: {
+    title: "Twitter",
+    text: "Twitter səhifəmiz.",
+    icon: '<i class="fa-brands fa-twitter"></i>',
+    link: "https://x.com"
+  },
+  youtube: {
+    title: "YouTube",
+    text: "Rəsmi YouTube kanalımız.",
+    icon: '<i class="fa-brands fa-youtube"></i>',
+    link: "https://www.youtube.com/@ParkCinemaAzerbaijan"
+  }
+};
+
+document.querySelectorAll(".footer-item").forEach(item => {
+  item.addEventListener("click", () => {
+    const type = item.dataset.type;
+    const info = data[type];
+
+    popupIcon.innerHTML = info.icon;
+    popupTitle.textContent = info.title;
+    popupText.textContent = info.text;
+    popupBtn.href = info.link;
+
+    popup.classList.remove("hidden");
+  });
+});
+
+popupClose.addEventListener("click", () => {
+  popup.classList.add("hidden");
+});
+
