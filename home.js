@@ -74,7 +74,7 @@ function pickRandom() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-search.addEventListener("input", async () => {
+search.addEventListener("input", () => {
   const q = search.value.trim().toLowerCase();
 
   if (!q) {
@@ -83,19 +83,14 @@ search.addEventListener("input", async () => {
     return;
   }
 
-  try {
-    const res = await fetch(`https://api.tvmaze.com/search/shows?q=${q}`);
-    const data = await res.json();
+  const filtered = allData.filter(show =>
+    show.name?.toLowerCase().includes(q)
+  );
 
-    const result = data.map(item => item.show);
-
-    list.innerHTML = "";
-    render(result, true);
-
-  } catch (err) {
-    console.error("Search error:", err);
-  }
+  list.innerHTML = "";
+  render(filtered, true);
 });
+
 
 randomBtn.addEventListener('click', pickRandom);
 loadMore.addEventListener('click', load);
